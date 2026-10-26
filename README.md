@@ -9,7 +9,7 @@
 | 场景 | 做什么 | 入口 |
 |---|---|---|
 | 换主机或调整工具 | 按当时版本手动选择和安装 skills、插件、相关配置 | [TOOLS.md](TOOLS.md) |
-| 创建新项目 | 从 `template` 分支克隆单 commit 起点，或手动取用模板文件 | [新建项目](#新建项目) |
+| 创建新项目 | 用 GitHub 的 Use this template 新建仓库，单 commit 即用 | [新建项目](#新建项目) |
 | 项目有代码结构后 | 标出主要目录与职责分组，供 review 和修改时定位 | [CODEBASE_MAP 模板](templates/CODEBASE_MAP.md) |
 | 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
 | 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [Git 分组提交](#git-分组提交) |
@@ -30,6 +30,8 @@
 | [skills/plan-flow/](skills/plan-flow/) | 保留的旧版技能，未纳入本版默认流程，限制见 TOOLS |
 
 根目录的 README、AGENTS 描述本仓库自身；它们与 templates 中的同名文件用途不同。给新项目使用时，取用 templates 中的文件。
+
+仓库长期只有两个分支：`main` 是供新建项目用的脚手架快照（生成物），`dev` 是手册与模板源，日常改动都在 `dev` 上提交。
 
 ## 默认项目模板
 
@@ -66,32 +68,20 @@ cp -i "$codingflow_source/templates/CODEBASE_MAP.md" "$project_dir/CODEBASE_MAP.
 
 ## 新建项目
 
-`templates/` 的内容同时以 `template` 分支提供：只含 `README.md` 和 `AGENTS.md`，单个 commit、无父提交，不含本仓库的历史。新项目从这里起步，`git log` 只有一条“chore: 初始化项目”。
+本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：只含 `README.md` 和 `AGENTS.md`，单个 commit、无父提交，不含手册历史。
 
-```bash
-# 1. 在 GitHub 创建空仓库，不勾 README、.gitignore、license
+1. 在 GitHub 点 **Use this template** → Create a new repository，选择模板后直接创建；不要勾 Include all branches，否则 `dev` 和 `robot-il` 也会被带进新仓库。
+2. 或者命令行：`gh repo create my-project --template cucu11039004-web/agent-project-scaffold --private`。
 
-# 2. 只克隆 template 分支
-git clone --single-branch -b template git@github.com:cucu11039004-web/agent-project-scaffold.git my-project
-cd my-project
+新仓库只有一条 Initial commit，根目录就是那两份文件。填掉括号里的提示、删掉不需要的段落即可开始；模板只放启动阶段就要填的两份，PLAN 和 CODEBASE_MAP 等有实际任务和代码后再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
 
-# 3. 换掉 origin，推成自己的项目
-git branch -m main
-git remote set-url origin git@github.com:cucu11039004-web/my-project.git
-git push -u origin main
-```
-
-`--single-branch` 不能省，否则会把 `main` 和其他分支的完整历史一起拉进新项目。推送后填写 README 与 AGENTS 中括号里的提示，删掉不需要的段落，再提交第一个改动。
-
-`template` 分支由 [scripts/sync-template-branch.sh](scripts/sync-template-branch.sh) 重建，不要直接在分支上提交。脚本只取已提交的内容，改完 `templates/` 先提交，再重跑并推送：
+`main` 由 [scripts/sync-template-branch.sh](scripts/sync-template-branch.sh) 从 `dev` 重建，是生成物：不要手改，也不要加分支保护。改完 `templates/` 在 `dev` 上提交后运行：
 
 ```bash
 scripts/sync-template-branch.sh --push
 ```
 
-脚本顶部的 `files` 数组决定模板分支包含哪些文件。目前只放启动阶段就要填的两份；PLAN 和 CODEBASE_MAP 等有实际任务和代码后再从 `templates/` 取，避免空占位被当成真实计划。
-
-GitHub 的 Template repository 按钮只复制默认分支，所以本仓库不启用它；如果以后想要那个按钮，把同样的内容推到一个单独的模板仓库即可，两边互不影响。
+脚本顶部的 `files` 数组决定脚手架包含哪些文件。
 
 ## Git 分组提交
 
@@ -135,4 +125,4 @@ docs 是扩展文档目录，并不等于 ADR。无需在项目启动时建立�
 
 旧版根目录的占位模板已移入 templates，SKILLS.md 扩展为 TOOLS.md，CONTEXT.md 改为可选的 GLOSSARY.md。已有项目可按需合并这些变化，不需要整体迁移。
 
-本版以当前主线的通用模板为入口。历史 robot-il 分支尚未按新结构整理，旧版 plan-flow 也尚未适配可选 TODO；两者都不作为第一版的必需依赖。
+本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。历史 robot-il 分支尚未按新结构整理，旧版 plan-flow 也尚未适配可选 TODO；两者都不作为第一版的必需依赖。

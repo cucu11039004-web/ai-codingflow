@@ -78,7 +78,7 @@ CODEBASE_MAP 随脚手架提供占位，有目录结构后按实际填写；纯�
 本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：收录 `templates/` 顶层除 `PLAN.md` 外的文件（目前是 `README.md`、`AGENTS.md`、`CODEBASE_MAP.md`），单个 commit、无父提交，不含手册历史。
 
 1. 在 GitHub 点 **Use this template** → Create a new repository，选择模板后直接创建；不要勾 Include all branches，否则 `dev` 也会被带进新仓库。
-2. 或者命令行：`gh repo create my-project --template cucu11039004-web/agent-project-scaffold --private`。
+2. 或者命令行：`gh repo create my-project --template cucu11039004-web/ai-codingflow --private`。
 
 新仓库只有一条 Initial commit，根目录就是这三份文件。填掉括号里的提示、删掉不需要的段落即可开始；模板不收录 `PLAN.md`，需要拆解任务时再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
 
@@ -96,14 +96,14 @@ scripts/sync-template-branch.sh --push
 
 ```bash
 # 本机有手册克隆时
-cp /path/to/agent-project-scaffold/templates/PLAN.md PLAN.md
+cp /path/to/ai-codingflow/templates/PLAN.md PLAN.md
 
 # 任何机器都能取（仓库公开）
-curl -fsSL https://raw.githubusercontent.com/cucu11039004-web/agent-project-scaffold/dev/templates/PLAN.md -o PLAN.md
+curl -fsSL https://raw.githubusercontent.com/cucu11039004-web/ai-codingflow/dev/templates/PLAN.md -o PLAN.md
 
 # 想统一走 gh（私有仓库也可）
 gh api -H "Accept: application/vnd.github.raw" \
-  "/repos/cucu11039004-web/agent-project-scaffold/contents/templates/PLAN.md?ref=dev" > PLAN.md
+  "/repos/cucu11039004-web/ai-codingflow/contents/templates/PLAN.md?ref=dev" > PLAN.md
 ```
 
 可选模板把路径换成 `templates/optional/TODO.md`、`templates/optional/GLOSSARY.md`；取 ADR 时先 `mkdir -p docs/adr`，再取 `templates/optional/docs/adr/README.md` 和 `TEMPLATE.md`。`docs/` 本身有实际内容时再建，不提前留空目录。

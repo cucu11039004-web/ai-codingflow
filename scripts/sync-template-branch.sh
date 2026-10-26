@@ -48,6 +48,13 @@ for file in "${files[@]}"; do
   GIT_INDEX_FILE="$index" git update-index --add --cacheinfo "100644,$blob,$file"
 done
 tree=$(GIT_INDEX_FILE="$index" git write-tree)
+
+# 内容没变就不重建，避免每次执行都产生一个无意义的强推。
+if git rev-parse --verify -q main >/dev/null && [[ "$(git rev-parse "main^{tree}")" == "$tree" ]]; then
+  echo "templates 内容没有变化，main 保持 $(git rev-parse --short main)"
+  exit 0
+fi
+
 commit=$(git commit-tree "$tree" -m "chore: 初始化项目")
 git branch -f main "$commit"
 echo "main -> $commit (${files[*]})"

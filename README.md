@@ -55,6 +55,7 @@ scripts/sync-template-branch.sh --push   # 只有改了模板才需要
 - 只改 README、TOOLS、`skills/` 或 `templates/optional/`：不进脚手架，不需要同步。
 - `dev` 里没有 `main` 的提交，两者历史无关，所以不存在「把 dev 合并进 main」这一步；同步永远是重建加 force push。
 - 同步只影响之后新建的仓库；已经在用的项目按「在已有项目里补文档」取用。
+- 脚本会先比较内容：`templates/` 没有实际变化时直接退出，不会产生多余的 force push。
 - 撤销一次模板改动：在 `dev` 上 revert 对应提交，再同步一次，不在 `main` 上回滚。
 - skills 与插件属于主机环境，记录在 TOOLS.md，不随项目模板走；要随新项目分发的文件放到 `templates/` 顶层。脚本目前只收录顶层文件，目录（如 `.claude/`、`docs/`）不会递归带过去。
 

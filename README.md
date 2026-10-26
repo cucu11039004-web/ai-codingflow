@@ -10,6 +10,7 @@
 |---|---|---|
 | 换主机或调整工具 | 按当时版本手动选择和安装 skills、插件、相关配置 | [TOOLS.md](TOOLS.md) |
 | 创建新项目 | 取用 README、AGENTS 模板，填写项目目标与工作环境 | [默认模板](#默认项目模板) |
+| 项目有代码结构后 | 标出主要目录与职责分组，供 review 和修改时定位 | [CODEBASE_MAP 模板](templates/CODEBASE_MAP.md) |
 | 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
 | 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [Git 分组提交](#git-分组提交) |
 | 文档需求增加 | 按实际缺口增加待办、术语表或决策记录 | [可选模板](#可选模板与扩展文档) |
@@ -23,7 +24,7 @@
 | [README.md](README.md) | 这套工作流的总入口、文档职责和使用时机 |
 | [TOOLS.md](TOOLS.md) | 工具用途、来源、安装与配置记录 |
 | [AGENTS.md](AGENTS.md) | 维护本仓库时的约定；根 CLAUDE.md 是指向它的兼容入口 |
-| [templates/](templates/) | 三份默认项目模板，复制到目标项目根目录 |
+| [templates/](templates/) | 四份默认项目模板，复制到目标项目根目录 |
 | [templates/optional/](templates/optional/) | 按需取用的 TODO、术语表和 ADR 模板 |
 | [skills/plan-flow/](skills/plan-flow/) | 保留的旧版技能，未纳入本版默认流程，限制见 TOOLS |
 
@@ -36,10 +37,13 @@
 | [README.md](templates/README.md) | 项目做什么、为什么做、怎么用？ | 启动时先写目标与范围；成果和用法明确后补齐；目标变化时更新 |
 | [AGENTS.md](templates/AGENTS.md) | 智能体在什么环境下工作，需要遵守什么？ | 首次协作前填写环境、资源、协作与提交约定；实际情况变化时更新 |
 | [PLAN.md](templates/PLAN.md) | 当前这一件任务怎么完成，如何验收？ | 具体任务需要拆解或跨会话接续时创建；执行中更新步骤和验收结果 |
+| [CODEBASE_MAP.md](templates/CODEBASE_MAP.md) | 代码在哪、改某类功能该看哪些位置？ | 出现稳定的目录结构后创建；目录或职责变化时更新 |
 
 README 的项目目标与 AGENTS 的工作环境都反映当前有效情况。项目实际用哪个虚拟环境、在哪台机器训练、有哪些可用设备，写在 AGENTS；README 维护面向使用者的运行方法，AGENTS 引用相应章节，避免两份命令长期分叉。
 
 PLAN 只记录当前任务，不扩展成所有任务的路线图。用户确认目标、范围和验收标准后开始执行，执行中在同一文件标记进度；完成后保留结果，开始下一项任务前确认有价值的记录已提交到 Git，再更新为新任务。Git 历史只能找回已提交的内容。
+
+CODEBASE_MAP 等目录结构稳定后再创建，只列主要路径和职责分组，供 review 和修改定位；纯文档项目可以不建。它不重复 README 的用法说明，也不替代 AGENTS 的环境事实。
 
 ### 手动取用
 
@@ -53,6 +57,8 @@ cp -i "$codingflow_source/templates/README.md" "$project_dir/README.md"
 cp -i "$codingflow_source/templates/AGENTS.md" "$project_dir/AGENTS.md"
 # 当前任务需要拆解时再取用
 cp -i "$codingflow_source/templates/PLAN.md" "$project_dir/PLAN.md"
+# 项目有代码结构后取用
+cp -i "$codingflow_source/templates/CODEBASE_MAP.md" "$project_dir/CODEBASE_MAP.md"
 ```
 
 已有项目应合并需要的章节，不整体覆盖现有内容。若项目使用 CLAUDE.md 作为入口，可在没有同名文件时创建指向 AGENTS.md 的软链，让两者共享一份内容。

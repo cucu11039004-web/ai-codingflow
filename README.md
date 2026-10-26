@@ -40,13 +40,13 @@
 | [README.md](templates/README.md) | 项目做什么、为什么做、怎么用？ | 启动时先写目标与范围；成果和用法明确后补齐；目标变化时更新 |
 | [AGENTS.md](templates/AGENTS.md) | 智能体在什么环境下工作，需要遵守什么？ | 首次协作前填写环境、资源、协作与提交约定；实际情况变化时更新 |
 | [PLAN.md](templates/PLAN.md) | 当前这一件任务怎么完成，如何验收？ | 具体任务需要拆解或跨会话接续时创建；执行中更新步骤和验收结果 |
-| [CODEBASE_MAP.md](templates/CODEBASE_MAP.md) | 代码在哪、改某类功能该看哪些位置？ | 出现稳定的目录结构后创建；目录或职责变化时更新 |
+| [CODEBASE_MAP.md](templates/CODEBASE_MAP.md) | 代码在哪、改某类功能该看哪些位置？ | 脚手架自带；有代码结构后按实际目录填写，结构变化时更新 |
 
 README 的项目目标与 AGENTS 的工作环境都反映当前有效情况。项目实际用哪个虚拟环境、在哪台机器训练、有哪些可用设备，写在 AGENTS；README 维护面向使用者的运行方法，AGENTS 引用相应章节，避免两份命令长期分叉。
 
 PLAN 只记录当前任务，不扩展成所有任务的路线图。用户确认目标、范围和验收标准后开始执行，执行中在同一文件标记进度；完成后保留结果，开始下一项任务前确认有价值的记录已提交到 Git，再更新为新任务。Git 历史只能找回已提交的内容。
 
-CODEBASE_MAP 等目录结构稳定后再创建，只列主要路径和职责分组，供 review 和修改定位；纯文档项目可以不建。它不重复 README 的用法说明，也不替代 AGENTS 的环境事实。
+CODEBASE_MAP 随脚手架提供占位，有目录结构后按实际填写；纯文档项目可以删掉它。它不重复 README 的用法说明，也不替代 AGENTS 的环境事实。
 
 ### 手动取用
 
@@ -68,12 +68,12 @@ cp -i "$codingflow_source/templates/CODEBASE_MAP.md" "$project_dir/CODEBASE_MAP.
 
 ## 新建项目
 
-本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：只含 `README.md` 和 `AGENTS.md`，单个 commit、无父提交，不含手册历史。
+本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：收录 `templates/` 顶层除 `PLAN.md` 外的文件（目前是 `README.md`、`AGENTS.md`、`CODEBASE_MAP.md`），单个 commit、无父提交，不含手册历史。
 
-1. 在 GitHub 点 **Use this template** → Create a new repository，选择模板后直接创建；不要勾 Include all branches，否则 `dev` 和 `robot-il` 也会被带进新仓库。
+1. 在 GitHub 点 **Use this template** → Create a new repository，选择模板后直接创建；不要勾 Include all branches，否则 `dev` 也会被带进新仓库。
 2. 或者命令行：`gh repo create my-project --template cucu11039004-web/agent-project-scaffold --private`。
 
-新仓库只有一条 Initial commit，根目录就是那两份文件。填掉括号里的提示、删掉不需要的段落即可开始；模板只放启动阶段就要填的两份，PLAN 和 CODEBASE_MAP 等有实际任务和代码后再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
+新仓库只有一条 Initial commit，根目录就是这三份文件。填掉括号里的提示、删掉不需要的段落即可开始；模板不收录 `PLAN.md`，需要拆解任务时再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
 
 `main` 由 [scripts/sync-template-branch.sh](scripts/sync-template-branch.sh) 从 `dev` 重建，是生成物：不要手改，也不要加分支保护。改完 `templates/` 在 `dev` 上提交后运行：
 
@@ -81,7 +81,7 @@ cp -i "$codingflow_source/templates/CODEBASE_MAP.md" "$project_dir/CODEBASE_MAP.
 scripts/sync-template-branch.sh --push
 ```
 
-脚本顶部的 `files` 数组决定脚手架包含哪些文件。
+脚本自动收录 `templates/` 顶层的文件，`exclude` 数组里的（目前只有 `PLAN.md`）不进入脚手架；以后新增模板文件，重跑脚本就会自动同步到 `main`。
 
 ## Git 分组提交
 
@@ -125,4 +125,4 @@ docs 是扩展文档目录，并不等于 ADR。无需在项目启动时建立�
 
 旧版根目录的占位模板已移入 templates，SKILLS.md 扩展为 TOOLS.md，CONTEXT.md 改为可选的 GLOSSARY.md。已有项目可按需合并这些变化，不需要整体迁移。
 
-本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。历史 robot-il 分支尚未按新结构整理，旧版 plan-flow 也尚未适配可选 TODO；两者都不作为第一版的必需依赖。
+本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。旧版 plan-flow 尚未适配可选 TODO，不作为第一版的必需依赖；原 robot-il 分支已归档为 `archive/robot-il` 标签，不再维护。

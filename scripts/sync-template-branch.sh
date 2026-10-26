@@ -4,8 +4,8 @@
 #   scripts/sync-template-branch.sh          # 只更新本地 main
 #   scripts/sync-template-branch.sh --push   # 更新后强制推送到 origin
 #
-# 进入脚手架的文件；增删时改这一行。README 与 AGENTS 是启动阶段就要填的两份。
-files=(README.md AGENTS.md)
+# templates/ 顶层的文件会自动进入脚手架；PLAN 是当前任务文档，按需创建，不放进模板。
+exclude=(PLAN.md)
 
 set -euo pipefail
 
@@ -23,6 +23,22 @@ if ! git diff --quiet HEAD -- templates; then
   exit 1
 fi
 
+files=()
+while IFS=$'\t' read -r meta name; do
+  type=${meta#* }
+  type=${type%% *}
+  [[ "$type" == "blob" ]] || continue
+  for skip in "${exclude[@]}"; do
+    [[ "$name" == "$skip" ]] && continue 2
+  done
+  files+=("$name")
+done < <(git ls-tree "dev:templates/")
+
+if [[ ${#files[@]} -eq 0 ]]; then
+  echo "templates/ 里没有可收录的文件。" >&2
+  exit 1
+fi
+
 index=$(mktemp)
 trap 'rm -f "$index"' EXIT
 
@@ -34,7 +50,7 @@ done
 tree=$(GIT_INDEX_FILE="$index" git write-tree)
 commit=$(git commit-tree "$tree" -m "chore: 初始化项目")
 git branch -f main "$commit"
-echo "main -> $commit"
+echo "main -> $commit（${files[*]}）"
 
 if [[ "${1:-}" == "--push" ]]; then
   git push --force origin "$commit:refs/heads/main"

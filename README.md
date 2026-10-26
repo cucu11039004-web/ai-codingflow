@@ -9,7 +9,7 @@
 | 场景 | 做什么 | 入口 |
 |---|---|---|
 | 换主机或调整工具 | 按当时版本手动选择和安装 skills、插件、相关配置 | [TOOLS.md](TOOLS.md) |
-| 创建新项目 | 取用 README、AGENTS 模板，填写项目目标与工作环境 | [默认模板](#默认项目模板) |
+| 创建新项目 | 从 `template` 分支克隆单 commit 起点，或手动取用模板文件 | [新建项目](#新建项目) |
 | 项目有代码结构后 | 标出主要目录与职责分组，供 review 和修改时定位 | [CODEBASE_MAP 模板](templates/CODEBASE_MAP.md) |
 | 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
 | 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [Git 分组提交](#git-分组提交) |
@@ -24,6 +24,7 @@
 | [README.md](README.md) | 这套工作流的总入口、文档职责和使用时机 |
 | [TOOLS.md](TOOLS.md) | 工具用途、来源、安装与配置记录 |
 | [AGENTS.md](AGENTS.md) | 维护本仓库时的约定；根 CLAUDE.md 是指向它的兼容入口 |
+| [scripts/](scripts/) | 维护脚本，目前用于重建 `template` 分支 |
 | [templates/](templates/) | 四份默认项目模板，复制到目标项目根目录 |
 | [templates/optional/](templates/optional/) | 按需取用的 TODO、术语表和 ADR 模板 |
 | [skills/plan-flow/](skills/plan-flow/) | 保留的旧版技能，未纳入本版默认流程，限制见 TOOLS |
@@ -62,6 +63,35 @@ cp -i "$codingflow_source/templates/CODEBASE_MAP.md" "$project_dir/CODEBASE_MAP.
 ```
 
 已有项目应合并需要的章节，不整体覆盖现有内容。若项目使用 CLAUDE.md 作为入口，可在没有同名文件时创建指向 AGENTS.md 的软链，让两者共享一份内容。
+
+## 新建项目
+
+`templates/` 的内容同时以 `template` 分支提供：只含 `README.md` 和 `AGENTS.md`，单个 commit、无父提交，不含本仓库的历史。新项目从这里起步，`git log` 只有一条“chore: 初始化项目”。
+
+```bash
+# 1. 在 GitHub 创建空仓库，不勾 README、.gitignore、license
+
+# 2. 只克隆 template 分支
+git clone --single-branch -b template git@github.com:cucu11039004-web/agent-project-scaffold.git my-project
+cd my-project
+
+# 3. 换掉 origin，推成自己的项目
+git branch -m main
+git remote set-url origin git@github.com:cucu11039004-web/my-project.git
+git push -u origin main
+```
+
+`--single-branch` 不能省，否则会把 `main` 和其他分支的完整历史一起拉进新项目。推送后填写 README 与 AGENTS 中括号里的提示，删掉不需要的段落，再提交第一个改动。
+
+`template` 分支由 [scripts/sync-template-branch.sh](scripts/sync-template-branch.sh) 重建，不要直接在分支上提交。脚本只取已提交的内容，改完 `templates/` 先提交，再重跑并推送：
+
+```bash
+scripts/sync-template-branch.sh --push
+```
+
+脚本顶部的 `files` 数组决定模板分支包含哪些文件。目前只放启动阶段就要填的两份；PLAN 和 CODEBASE_MAP 等有实际任务和代码后再从 `templates/` 取，避免空占位被当成真实计划。
+
+GitHub 的 Template repository 按钮只复制默认分支，所以本仓库不启用它；如果以后想要那个按钮，把同样的内容推到一个单独的模板仓库即可，两边互不影响。
 
 ## Git 分组提交
 

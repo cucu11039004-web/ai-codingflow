@@ -20,6 +20,7 @@
 - 模板中的占位符是填写提示，不代表当前项目的实际情况。不要把本仓库的维护记录写入模板。
 - `main` 是 GitHub 模板用的脚手架快照，收录 `templates/` 顶层除 `PLAN.md` 外的文件，单个 commit，由 `scripts/sync-template-branch.sh` 从 `dev` 重建并 force-push；不手改 `main`，也不给它加分支保护，日常改动都提交到 `dev`。新增模板文件后重跑脚本即可同步。
 - 仓库已设为 Template repository，默认分支为 `main`；新建项目走网页的 Use this template 或 `gh repo create --template`，不再从模板分支克隆。
+- 只改 README、TOOLS、`skills/` 或 `templates/optional/` 不影响脚手架，不需要同步；`main` 与 `dev` 历史无关，不要尝试 merge，撤销模板改动就在 `dev` 上 revert 后再同步。
 - 改动文件职责或路径时，同时检查 README、TOOLS 和模板中的引用。根 CLAUDE.md 保持指向本文件。
 - skills/plan-flow 保留旧实现，暂不纳入默认流程；不主动调用它，也不把它的 TODO 要求应用到新模板。
 

@@ -24,14 +24,39 @@
 | [README.md](README.md) | 这套工作流的总入口、文档职责和使用时机 |
 | [TOOLS.md](TOOLS.md) | 工具用途、来源、安装与配置记录 |
 | [AGENTS.md](AGENTS.md) | 维护本仓库时的约定；根 CLAUDE.md 是指向它的兼容入口 |
-| [scripts/](scripts/) | 维护脚本，目前用于重建 `template` 分支 |
+| [scripts/](scripts/) | 维护脚本，用于从 `dev` 重建 `main` 脚手架 |
 | [templates/](templates/) | 四份默认项目模板，复制到目标项目根目录 |
 | [templates/optional/](templates/optional/) | 按需取用的 TODO、术语表和 ADR 模板 |
 | [skills/plan-flow/](skills/plan-flow/) | 保留的旧版技能，未纳入本版默认流程，限制见 TOOLS |
 
 根目录的 README、AGENTS 描述本仓库自身；它们与 templates 中的同名文件用途不同。给新项目使用时，取用 templates 中的文件。
 
-仓库长期只有两个分支：`main` 是供新建项目用的脚手架快照（生成物），`dev` 是手册与模板源，日常改动都在 `dev` 上提交。
+## 分支与更新
+
+```
+dev ──scripts/sync-template-branch.sh──▶ main
+```
+
+| 分支 | 角色 | 规则 |
+|---|---|---|
+| `dev` | 唯一写入分支：手册、templates、scripts、TOOLS | 所有改动都在这里提交 |
+| `main` | 生成物：`templates/` 顶层除 `PLAN.md` 外的文件，单个 commit | 由脚本重建，不手改、不 merge、不加分支保护 |
+
+一次完整的更新：
+
+```bash
+git checkout dev
+# 改 templates/ 顶层文件；只改手册则不涉及模板
+git add -A && git commit
+git push origin dev
+scripts/sync-template-branch.sh --push   # 只有改了模板才需要
+```
+
+- 只改 README、TOOLS、`skills/` 或 `templates/optional/`：不进脚手架，不需要同步。
+- `dev` 里没有 `main` 的提交，两者历史无关，所以不存在「把 dev 合并进 main」这一步；同步永远是重建加 force push。
+- 同步只影响之后新建的仓库；已经在用的项目按上一节手动补。
+- 撤销一次模板改动：在 `dev` 上 revert 对应提交，再同步一次，不在 `main` 上回滚。
+- skills 与插件属于主机环境，记录在 TOOLS.md，不随项目模板走；要随新项目分发的文件放到 `templates/` 顶层。脚本目前只收录顶层文件，目录（如 `.claude/`、`docs/`）不会递归带过去。
 
 ## 默认项目模板
 

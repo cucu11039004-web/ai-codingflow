@@ -50,7 +50,7 @@ done
 tree=$(GIT_INDEX_FILE="$index" git write-tree)
 commit=$(git commit-tree "$tree" -m "chore: 初始化项目")
 git branch -f main "$commit"
-echo "main -> $commit（${files[*]}）"
+echo "main -> $commit (${files[*]})"
 
 if [[ "${1:-}" == "--push" ]]; then
   git push --force origin "$commit:refs/heads/main"

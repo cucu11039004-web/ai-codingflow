@@ -26,6 +26,6 @@
 
 | 文档 | 用途 |
 |---|---|
-| [AGENTS.md](AGENTS.md) | 工作环境、资源与协作约定 |
+| [AGENTS.md](AGENTS.md) | 工作环境、资源、协作与 Git 提交约定 |
 
 （开始具体任务并创建 PLAN.md 后，在此补上入口。只有采用 TODO、GLOSSARY 或 docs 中的文档时才增加对应链接；完成填写后删除本提示。）

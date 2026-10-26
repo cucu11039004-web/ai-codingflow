@@ -12,7 +12,7 @@
 | 创建新项目 | 用 GitHub 的 Use this template 新建仓库，单 commit 即用 | [新建项目](#新建项目) |
 | 项目有代码结构后 | 标出主要目录与职责分组，供 review 和修改时定位 | [CODEBASE_MAP 模板](templates/CODEBASE_MAP.md) |
 | 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
-| 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [Git 分组提交](#git-分组提交) |
+| 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [AGENTS.md](AGENTS.md#git-分组提交) |
 | 文档需求增加 | 按实际缺口增加待办、术语表或决策记录 | [可选模板](#可选模板与扩展文档) |
 
 换主机的参考只覆盖 vibe coding 的工具配置，不覆盖操作系统、驱动或完整开发环境搭建。安装属于低频人工操作，不由本仓库自动执行。
@@ -54,7 +54,7 @@ scripts/sync-template-branch.sh --push   # 只有改了模板才需要
 
 - 只改 README、TOOLS、`skills/` 或 `templates/optional/`：不进脚手架，不需要同步。
 - `dev` 里没有 `main` 的提交，两者历史无关，所以不存在「把 dev 合并进 main」这一步；同步永远是重建加 force push。
-- 同步只影响之后新建的仓库；已经在用的项目按上一节手动补。
+- 同步只影响之后新建的仓库；已经在用的项目按「在已有项目里补文档」取用。
 - 撤销一次模板改动：在 `dev` 上 revert 对应提交，再同步一次，不在 `main` 上回滚。
 - skills 与插件属于主机环境，记录在 TOOLS.md，不随项目模板走；要随新项目分发的文件放到 `templates/` 顶层。脚本目前只收录顶层文件，目录（如 `.claude/`、`docs/`）不会递归带过去。
 
@@ -72,24 +72,6 @@ README 的项目目标与 AGENTS 的工作环境都反映当前有效情况。�
 PLAN 只记录当前任务，不扩展成所有任务的路线图。用户确认目标、范围和验收标准后开始执行，执行中在同一文件标记进度；完成后保留结果，开始下一项任务前确认有价值的记录已提交到 Git，再更新为新任务。Git 历史只能找回已提交的内容。
 
 CODEBASE_MAP 随脚手架提供占位，有目录结构后按实际填写；纯文档项目可以删掉它。它不重复 README 的用法说明，也不替代 AGENTS 的环境事实。
-
-### 手动取用
-
-在新项目中取用需要的模板，替换括号中的填写提示。不适用的章节可以删除，尚不清楚的信息标记为“待确认”，不要猜测。
-
-```bash
-codingflow_source="/path/to/ai-codingflow"
-project_dir="/path/to/your-project"
-mkdir -p "$project_dir"
-cp -i "$codingflow_source/templates/README.md" "$project_dir/README.md"
-cp -i "$codingflow_source/templates/AGENTS.md" "$project_dir/AGENTS.md"
-# 当前任务需要拆解时再取用
-cp -i "$codingflow_source/templates/PLAN.md" "$project_dir/PLAN.md"
-# 项目有代码结构后取用
-cp -i "$codingflow_source/templates/CODEBASE_MAP.md" "$project_dir/CODEBASE_MAP.md"
-```
-
-已有项目应合并需要的章节，不整体覆盖现有内容。若项目使用 CLAUDE.md 作为入口，可在没有同名文件时创建指向 AGENTS.md 的软链，让两者共享一份内容。
 
 ## 新建项目
 
@@ -113,8 +95,8 @@ scripts/sync-template-branch.sh --push
 模板只决定新仓库的起点，之后改 `templates/` 不会自动更新已经建好的项目。需要 `PLAN.md`、`TODO.md`、`GLOSSARY.md`、ADR 或 `docs/` 时，从 `dev` 取单个文件，再在项目 README 的「文档入口」补一行。
 
 ```bash
-# 本机有手册克隆时（$codingflow_source 见上文「手动取用」）
-cp "$codingflow_source/templates/PLAN.md" PLAN.md
+# 本机有手册克隆时
+cp /path/to/agent-project-scaffold/templates/PLAN.md PLAN.md
 
 # 任何机器都能取（仓库公开）
 curl -fsSL https://raw.githubusercontent.com/cucu11039004-web/agent-project-scaffold/dev/templates/PLAN.md -o PLAN.md
@@ -127,31 +109,6 @@ gh api -H "Accept: application/vnd.github.raw" \
 可选模板把路径换成 `templates/optional/TODO.md`、`templates/optional/GLOSSARY.md`；取 ADR 时先 `mkdir -p docs/adr`，再取 `templates/optional/docs/adr/README.md` 和 `TEMPLATE.md`。`docs/` 本身有实际内容时再建，不提前留空目录。
 
 PLAN 绑定当前任务，`docs/` 放独立成篇的说明，都按需添加，不用一次补齐；补完后按文件里的提示填写，删掉不适用的占位。
-
-## Git 分组提交
-
-提交格式、语言和授权规则统一放在项目的 AGENTS.md，随项目生效；PLAN 只记录阶段边界与实际验收结果，README 说明使用方式。当前不增加专用 skill；以后若需要跨仓库复用暂存、检查、拆分提交等操作流程，再封装 skill，并继续引用各项目的 AGENTS 约定。
-
-默认使用 `feat: 摘要`、`fix: 摘要`、`docs: 摘要`，冒号使用英文 `:`；已有仓库存在其他类型约定时沿用原约定。个人项目的说明默认中文，公开或团队协作项目默认英文，可在 AGENTS 中明确覆盖。每个 commit 只说明做了什么，标题不足以表达时再补少量具体改动，不加背景、验证结果或阶段收尾等固定分节。
-
-分块体现在提交次数上：若十几个文件涉及三个独立目的，就按目的分成三组，各提交一次。同一目的下的代码、测试和文档一起提交；同一文件涉及多个目的时按改动区段拆分，具体规则见 [AGENTS 模板](templates/AGENTS.md#git-提交约定)。
-
-例如，一轮修改涉及以下三个独立目的，可分别提交：
-
-| 改动块 | 涉及内容 | 单独的 commit |
-|---|---|---|
-| 设置功能 | 配置读写、设置页面及相关测试 | `feat(settings): 支持保存用户偏好` |
-| 请求修复 | 请求去重逻辑及相关测试 | `fix(api): 修复重复发送请求的问题` |
-| 安装文档 | 安装步骤与配置示例 | `docs: 补充安装步骤与配置示例` |
-
-| 触发方式 | 行为 |
-|---|---|
-| 阶段实现且验证通过 | 主动整理提交分组及每组说明；未授权时不执行 commit |
-| “按独立改动整理提交分组和说明，先不提交。” | 检查实际 diff 和验证记录，输出各组的范围与说明草稿 |
-| “检查本阶段改动，按独立内容分批提交，用中文说明做了什么。” | 核对范围与验证结果，逐组完成本地 commit；必要验证未通过时说明阻塞 |
-| “本任务各阶段验证通过后，按项目约定自动提交。” | 在本任务授权范围内逐阶段按组提交，无需每阶段再次确认 |
-
-这些是自然语言指令，不需要注册命令或安装插件。验证仍在提交前完成，结果记录在已采用的 PLAN 或任务反馈中。
 
 ## 可选模板与扩展文档
 

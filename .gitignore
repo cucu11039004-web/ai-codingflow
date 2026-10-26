@@ -15,4 +15,4 @@ __pycache__/
 # outputs/
 # datasets/
 
-# 注意：docs/ 是**跟踪**的（上下文地图、术语表、ADR、计划都在里面），不要忽略它。
+# 项目文档与 templates/ 都应被跟踪，不忽略 docs/。

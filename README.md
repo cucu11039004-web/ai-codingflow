@@ -83,6 +83,26 @@ scripts/sync-template-branch.sh --push
 
 脚本自动收录 `templates/` 顶层的文件，`exclude` 数组里的（目前只有 `PLAN.md`）不进入脚手架；以后新增模板文件，重跑脚本就会自动同步到 `main`。
 
+### 在已有项目里补文档
+
+模板只决定新仓库的起点，之后改 `templates/` 不会自动更新已经建好的项目。需要 `PLAN.md`、`TODO.md`、`GLOSSARY.md`、ADR 或 `docs/` 时，从 `dev` 取单个文件，再在项目 README 的「文档入口」补一行。
+
+```bash
+# 本机有手册克隆时（$codingflow_source 见上文「手动取用」）
+cp "$codingflow_source/templates/PLAN.md" PLAN.md
+
+# 任何机器都能取（仓库公开）
+curl -fsSL https://raw.githubusercontent.com/cucu11039004-web/agent-project-scaffold/dev/templates/PLAN.md -o PLAN.md
+
+# 想统一走 gh（私有仓库也可）
+gh api -H "Accept: application/vnd.github.raw" \
+  "/repos/cucu11039004-web/agent-project-scaffold/contents/templates/PLAN.md?ref=dev" > PLAN.md
+```
+
+可选模板把路径换成 `templates/optional/TODO.md`、`templates/optional/GLOSSARY.md`；取 ADR 时先 `mkdir -p docs/adr`，再取 `templates/optional/docs/adr/README.md` 和 `TEMPLATE.md`。`docs/` 本身有实际内容时再建，不提前留空目录。
+
+PLAN 绑定当前任务，`docs/` 放独立成篇的说明，都按需添加，不用一次补齐；补完后按文件里的提示填写，删掉不适用的占位。
+
 ## Git 分组提交
 
 提交格式、语言和授权规则统一放在项目的 AGENTS.md，随项目生效；PLAN 只记录阶段边界与实际验收结果，README 说明使用方式。当前不增加专用 skill；以后若需要跨仓库复用暂存、检查、拆分提交等操作流程，再封装 skill，并继续引用各项目的 AGENTS 约定。

@@ -2,8 +2,6 @@
 
 本文件记录 vibe coding 使用的 skills、插件和相关配置，供换主机或调整工具时手动查阅。安装方式会变化，应根据所用客户端、版本和原始来源核对；这份清单不是必须全部安装的套餐。
 
-本版先确定记录结构，具体安装来源尚未补齐。旧清单中的名称不等于当前主机已经安装或验证过，不再提供无法使用的占位仓库安装命令。
-
 ## 先记录现用组合
 
 | 类别 | 需要填写的内容 | 什么时候更新 |
@@ -15,20 +13,19 @@
 
 个人通用配置记录在这里；项目实际使用的虚拟环境、服务器算力和硬件设备写入目标项目的 AGENTS.md。登录凭证不作为文档内容保存。
 
-## 原有 skill 清单
+## 现用 skills 与 agent
 
-以下保留旧清单中的候选项，便于后续逐项筛选。只有本仓库中的 plan-flow 实现路径已确认；其余安装来源仍需填写，暂不声称它们来自同一个仓库。
-
-| Skill | 用途 | 来源与当前状态 |
+| 来源 | 内容 | 安装与更新 |
 |---|---|---|
-| grill-me | 通过逐轮提问澄清目标、边界和设计取舍 | 安装来源待补充；是否采用由用户选择 |
-| grill-with-docs | 讨论时协助整理文档 | 旧清单候选；来源、实际行为及与新文档分工的兼容性待核实 |
-| domain-modeling | 维护领域概念与术语 | 旧清单候选；仅在有领域建模需求时考虑，来源待补充 |
-| handoff | 整理跨会话交接信息 | 旧清单候选；来源待补充；不得替代项目中的有效文档 |
-| find-skills | 查找其他 skills | 旧清单候选；来源待补充，按需采用 |
-| plan-flow | 旧版 PLAN 状态流转 | [仓库实现](skills/plan-flow/SKILL.md)；保留旧版，不纳入默认流程 |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock 的 skill 集（grill-me、grilling、domain-modeling、handoff 等），按需挑选 | `npx skills@latest add mattpocock/skills -g -a claude-code -a codex -a github-copilot`，交互选择要装的 skill |
+| [cucu11039004-web/Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills) | 自己写的 skill（如 paper-digest）和 VS Code Copilot 模式的 agent（如 Chat） | 见该仓库 README，安装与更新是同一条命令 |
+| [vercel-labs/skills](https://github.com/vercel-labs/skills) | skills CLI 本身，以及 find-skills | CLI 用 `npx skills@latest` 直接运行，不用单独安装 |
 
-旧版 plan-flow 要求 TODO、使用评审 / 执行 / 归档子命令，并要求完成后重置 PLAN；这些约定尚未适配本版的可选 TODO 和完成记录保留方式。需要启用时先独立调整并验证，不直接套用到新模板。
+- skills CLI 把 skill 实际装在 `~/.agents/skills/`，Codex 直接读这里；Claude Code 读 `~/.claude/skills/`，Copilot 读 `~/.copilot/skills/`。用 `-a` 指定了哪些客户端，CLI 就在对应目录自动建好链接；如果 `~/.claude/skills` 已经整个链到 `~/.agents/skills`，CLI 会识别出是同一位置并跳过，不会重复建链。
+- 不带 skill 名的 `npx skills update -g` 会更新所有来源的 skill。只想更新某个来源时，重新执行该来源的 `add` 命令，或者用 `npx skills update <skill 名> -g` 指定名字。
+- 自己的新 skill 只加到 Tommy-skills，本仓库不放 skill。
+
+最近核实：2026-11-07，skills CLI 1.7.6。
 
 ## 每项工具的记录格式
 

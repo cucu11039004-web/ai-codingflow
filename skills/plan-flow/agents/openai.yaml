@@ -1,5 +1,0 @@
-interface:
-  display_name: "Plan Flow"
-  short_description: "Manage PLAN.md lifecycle (review/execute/archive)"
-policy:
-  allow_implicit_invocation: false

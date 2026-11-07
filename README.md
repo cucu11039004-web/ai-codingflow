@@ -27,9 +27,10 @@
 | [scripts/](scripts/) | 维护脚本，用于从 `dev` 重建 `main` 脚手架 |
 | [templates/](templates/) | 四份默认项目模板，复制到目标项目根目录 |
 | [templates/optional/](templates/optional/) | 按需取用的 TODO、术语表和 ADR 模板 |
-| [skills/plan-flow/](skills/plan-flow/) | 保留的旧版技能，未纳入本版默认流程，限制见 TOOLS |
 
 根目录的 README、AGENTS 描述本仓库自身；它们与 templates 中的同名文件用途不同。给新项目使用时，取用 templates 中的文件。
+
+本仓库只放工作流手册和模板，不放 skill。自己写的 skill 和 Copilot agent 放在 [Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills)，安装方式见 TOOLS。
 
 ## 分支与更新
 
@@ -52,7 +53,7 @@ git push origin dev
 scripts/sync-template-branch.sh --push   # 只有改了模板才需要
 ```
 
-- 只改 README、TOOLS、`skills/` 或 `templates/optional/`：不进脚手架，不需要同步。
+- 只改 README、TOOLS 或 `templates/optional/`：不进脚手架，不需要同步。
 - `dev` 里没有 `main` 的提交，两者历史无关，所以不存在「把 dev 合并进 main」这一步；同步永远是重建加 force push。
 - 同步只影响之后新建的仓库；已经在用的项目按「在已有项目里补文档」取用。
 - 脚本会先比较内容：`templates/` 没有实际变化时直接退出，不会产生多余的 force push。
@@ -128,4 +129,4 @@ docs 是扩展文档目录，并不等于 ADR。无需在项目启动时建立�
 
 旧版根目录的占位模板已移入 templates，SKILLS.md 扩展为 TOOLS.md，CONTEXT.md 改为可选的 GLOSSARY.md。已有项目可按需合并这些变化，不需要整体迁移。
 
-本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。旧版 plan-flow 尚未适配可选 TODO，不作为第一版的必需依赖；原 robot-il 分支已归档为 `archive/robot-il` 标签，不再维护。
+本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。旧版 plan-flow skill 已删除，需要时从 Git 历史找回；原 robot-il 分支已归档为 `archive/robot-il` 标签，不再维护。

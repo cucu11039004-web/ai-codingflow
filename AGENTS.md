@@ -20,6 +20,10 @@
 - 改动文件职责或路径时，同时更新 CODEBASE_MAP，并检查 README、AGENTS 和模板中的引用。根 CLAUDE.md 只保留一行 `@AGENTS.md`。
 - 本仓库不放 skill，也不记录工具安装。skills 与 agent 统一由 [Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills) 维护。
 
+## 文档写作
+
+写法与 [AGENTS 模板](templates/AGENTS.md#文档写作约定) 保持一致，完整规则见 `writing-for-humans` skill。
+
 ## Git 分组提交
 
 提交格式、说明语言和授权规则与 [AGENTS 模板](templates/AGENTS.md#git-提交约定) 保持一致：`feat: 摘要`、`fix: 摘要`、`docs: 摘要`，冒号用英文；个人项目默认中文说明；按独立目的分组，每组一个 commit；只说明做了什么，标题不够时再补少量具体改动，不加背景、验证结果或阶段收尾等固定分节。

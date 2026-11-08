@@ -6,7 +6,7 @@
 
 | 位置 | 内容 |
 |---|---|
-| [README.md](README.md) | 工作流、分支与更新流程、取用方式和文档创建时机 |
+| [README.md](README.md) | main、dev 两个分支的用法，各模板写什么、何时写 |
 | [CODEBASE_MAP.md](CODEBASE_MAP.md) | 各目录和文件的职责，改某类内容时动哪里、是否要同步 `main` |
 
 ## 维护边界

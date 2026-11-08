@@ -4,7 +4,7 @@
 #   scripts/sync-template-branch.sh          # 只更新本地 main
 #   scripts/sync-template-branch.sh --push   # 更新后强制推送到 origin
 #
-# 规则：templates/ 里直接放着的文件就是 main 的全部内容；optional/ 等子目录不进入。
+# 规则：templates/ 下除 optional/ 以外的全部文件（含 docs/ 等子目录）就是 main 的全部内容。
 
 set -euo pipefail
 
@@ -27,8 +27,9 @@ while IFS=$'\t' read -r meta name; do
   type=${meta#* }
   type=${type%% *}
   [[ "$type" == "blob" ]] || continue
+  [[ "$name" == optional/* ]] && continue
   files+=("$name")
-done < <(git ls-tree "dev:templates/")
+done < <(git ls-tree -r "dev:templates/")
 
 if [[ ${#files[@]} -eq 0 ]]; then
   echo "templates/ 里没有可收录的文件。" >&2

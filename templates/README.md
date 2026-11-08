@@ -29,5 +29,6 @@
 | [AGENTS.md](AGENTS.md) | 工作环境、资源、协作与 Git 提交约定 |
 | [CODEBASE_MAP.md](CODEBASE_MAP.md) | 目录结构与各部分职责，定位改动区域 |
 | [GLOSSARY.md](GLOSSARY.md) | 项目里容易误解的术语和符号 |
+| [docs/](docs/README.md) | 独立成篇的文档及其索引 |
 
 （开始具体任务并创建 PLAN.md 时，在此补上入口。纯文档项目不用 CODEBASE_MAP 时删掉该行；采用 TODO 等其他文档时再增加对应链接；完成填写后删除本提示。）

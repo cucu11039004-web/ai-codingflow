@@ -6,10 +6,8 @@
 
 | 位置 | 内容 |
 |---|---|
-| [README.md](README.md) | 工作流、目录分工、取用方式和文档创建时机 |
-| [scripts/](scripts/) | 维护脚本：从 `dev` 的 `templates/` 重建 `main` 脚手架快照 |
-| [templates/](templates/) | README、AGENTS、PLAN、CODEBASE_MAP 四份默认模板 |
-| [templates/optional/](templates/optional/) | TODO、GLOSSARY、ADR 可选模板 |
+| [README.md](README.md) | 工作流、分支与更新流程、取用方式和文档创建时机 |
+| [CODEBASE_MAP.md](CODEBASE_MAP.md) | 各目录和文件的职责，改某类内容时动哪里、是否要同步 `main` |
 
 ## 维护边界
 
@@ -19,7 +17,7 @@
 - `main` 是 GitHub 模板用的脚手架快照，收录 `templates/` 顶层除 `PLAN.md` 外的文件，单个 commit，由 `scripts/sync-template-branch.sh` 从 `dev` 重建并 force-push；不手改 `main`，也不给它加分支保护，日常改动都提交到 `dev`。新增模板文件后重跑脚本即可同步。
 - 仓库已设为 Template repository，默认分支为 `main`；新建项目走网页的 Use this template 或 `gh repo create --template`，不再从模板分支克隆。
 - 只改根目录手册或 `templates/optional/` 不影响脚手架，不需要同步；`main` 与 `dev` 历史无关，不要尝试 merge，撤销模板改动就在 `dev` 上 revert 后再同步。
-- 改动文件职责或路径时，同时检查 README、AGENTS 和模板中的引用。根 CLAUDE.md 保持指向本文件。
+- 改动文件职责或路径时，同时更新 CODEBASE_MAP，并检查 README、AGENTS 和模板中的引用。根 CLAUDE.md 保持指向本文件。
 - 本仓库不放 skill，也不记录工具安装。skills 与 agent 统一由 [Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills) 维护，这里只在 README 引用它。
 
 ## Git 分组提交

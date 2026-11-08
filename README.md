@@ -6,6 +6,8 @@
 
 使用前先按 [Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills) 的 README 安装 skills 和 agent。本仓库只放工作流手册和模板，不放 skill，也不记录工具安装。
 
+各目录和文件的职责见 [CODEBASE_MAP.md](CODEBASE_MAP.md)。根目录的 README、AGENTS 描述本仓库自身，给新项目用的是 `templates/` 中的同名文件。
+
 ## 从哪里开始
 
 | 场景 | 做什么 | 入口 |
@@ -15,18 +17,6 @@
 | 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
 | 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [AGENTS.md](AGENTS.md#git-分组提交) |
 | 文档需求增加 | 按实际缺口增加待办、术语表或决策记录 | [可选模板](#可选模板与扩展文档) |
-
-## 本仓库的布局
-
-| 位置 | 职责 |
-|---|---|
-| [README.md](README.md) | 这套工作流的总入口、文档职责和使用时机 |
-| [AGENTS.md](AGENTS.md) | 维护本仓库时的约定；根 CLAUDE.md 是指向它的兼容入口 |
-| [scripts/](scripts/) | 维护脚本，用于从 `dev` 重建 `main` 脚手架 |
-| [templates/](templates/) | 四份默认项目模板，复制到目标项目根目录 |
-| [templates/optional/](templates/optional/) | 按需取用的 TODO、术语表和 ADR 模板 |
-
-根目录的 README、AGENTS 描述本仓库自身；它们与 templates 中的同名文件用途不同。给新项目使用时，取用 templates 中的文件。
 
 ## 分支与更新
 
@@ -73,12 +63,12 @@ CODEBASE_MAP 随脚手架提供占位，有目录结构后按实际填写；纯�
 
 ## 新建项目
 
-本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：收录 `templates/` 顶层除 `PLAN.md` 外的文件（目前是 `README.md`、`AGENTS.md`、`CODEBASE_MAP.md`），单个 commit、无父提交，不含手册历史。
+本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：收录 `templates/` 顶层除 `PLAN.md` 外的文件，单个 commit、无父提交，不含手册历史。
 
 1. 在 GitHub 点 **Use this template** → Create a new repository，选择模板后直接创建；不要勾 Include all branches，否则 `dev` 也会被带进新仓库。
 2. 或者命令行：`gh repo create my-project --template cucu11039004-web/ai-codingflow --private`。
 
-新仓库只有一条 Initial commit，根目录就是这三份文件。填掉括号里的提示、删掉不需要的段落即可开始；模板不收录 `PLAN.md`，需要拆解任务时再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
+新仓库只有一条 Initial commit，根目录就是这几份默认模板。填掉括号里的提示、删掉不需要的段落即可开始；模板不收录 `PLAN.md`，需要拆解任务时再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
 
 `main` 由 [scripts/sync-template-branch.sh](scripts/sync-template-branch.sh) 从 `dev` 重建，是生成物：不要手改，也不要加分支保护。改完 `templates/` 在 `dev` 上提交后运行：
 

@@ -8,7 +8,7 @@
 
 - [README.md](README.md)——main、dev 两个分支的用法，各模板写什么、何时写
 - [AGENTS.md](AGENTS.md)——维护本仓库时的约定与检查项
-  - CLAUDE.md——指向 AGENTS.md 的软链，供 Claude Code 读取同一份约定
+  - CLAUDE.md——只有一行 `@AGENTS.md`，供 Claude Code 读取同一份约定
 - CODEBASE_MAP.md——本文件
 - [scripts/](scripts/)
   - [sync-template-branch.sh](scripts/sync-template-branch.sh)——从 `dev` 已提交的 `templates/` 重建 `main` 脚手架

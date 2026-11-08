@@ -1,36 +1,32 @@
 # ai-codingflow
 
-个人 AI 编程工作流手册，附可复用的项目文档模板。记录工具怎么选、项目文档怎么写、不同阶段该维护什么，供自己和后续项目使用。
+个人 AI 编程工作流手册，附可复用的项目文档模板。记录项目文档怎么写、不同阶段该维护什么，供自己和后续项目使用。
 
 背景、目标、计划的实质内容由你提供和决定；AI 可以润色、追问、检查遗漏，并按已确认的任务执行。模板帮助表达清楚，不要求每个项目填满所有文件。
+
+使用前先按 [Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills) 的 README 安装 skills 和 agent。本仓库只放工作流手册和模板，不放 skill，也不记录工具安装。
 
 ## 从哪里开始
 
 | 场景 | 做什么 | 入口 |
 |---|---|---|
-| 换主机或调整工具 | 按当时版本手动选择和安装 skills、插件、相关配置 | [TOOLS.md](TOOLS.md) |
 | 创建新项目 | 用 GitHub 的 Use this template 新建仓库，单 commit 即用 | [新建项目](#新建项目) |
 | 项目有代码结构后 | 标出主要目录与职责分组，供 review 和修改时定位 | [CODEBASE_MAP 模板](templates/CODEBASE_MAP.md) |
 | 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
 | 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [AGENTS.md](AGENTS.md#git-分组提交) |
 | 文档需求增加 | 按实际缺口增加待办、术语表或决策记录 | [可选模板](#可选模板与扩展文档) |
 
-换主机的参考只覆盖 vibe coding 的工具配置，不覆盖操作系统、驱动或完整开发环境搭建。安装属于低频人工操作，不由本仓库自动执行。
-
 ## 本仓库的布局
 
 | 位置 | 职责 |
 |---|---|
 | [README.md](README.md) | 这套工作流的总入口、文档职责和使用时机 |
-| [TOOLS.md](TOOLS.md) | 工具用途、来源、安装与配置记录 |
 | [AGENTS.md](AGENTS.md) | 维护本仓库时的约定；根 CLAUDE.md 是指向它的兼容入口 |
 | [scripts/](scripts/) | 维护脚本，用于从 `dev` 重建 `main` 脚手架 |
 | [templates/](templates/) | 四份默认项目模板，复制到目标项目根目录 |
 | [templates/optional/](templates/optional/) | 按需取用的 TODO、术语表和 ADR 模板 |
 
 根目录的 README、AGENTS 描述本仓库自身；它们与 templates 中的同名文件用途不同。给新项目使用时，取用 templates 中的文件。
-
-本仓库只放工作流手册和模板，不放 skill。自己写的 skill 和 Copilot agent 放在 [Tommy-skills](https://github.com/cucu11039004-web/Tommy-skills)，安装方式见 TOOLS。
 
 ## 分支与更新
 
@@ -40,7 +36,7 @@ dev ──scripts/sync-template-branch.sh──▶ main
 
 | 分支 | 角色 | 规则 |
 |---|---|---|
-| `dev` | 唯一写入分支：手册、templates、scripts、TOOLS | 所有改动都在这里提交 |
+| `dev` | 唯一写入分支：手册、templates、scripts | 所有改动都在这里提交 |
 | `main` | 生成物：`templates/` 顶层除 `PLAN.md` 外的文件，单个 commit | 由脚本重建，不手改、不 merge、不加分支保护 |
 
 一次完整的更新：
@@ -53,12 +49,12 @@ git push origin dev
 scripts/sync-template-branch.sh --push   # 只有改了模板才需要
 ```
 
-- 只改 README、TOOLS 或 `templates/optional/`：不进脚手架，不需要同步。
+- 只改根目录的手册或 `templates/optional/`：不进脚手架，不需要同步。
 - `dev` 里没有 `main` 的提交，两者历史无关，所以不存在「把 dev 合并进 main」这一步；同步永远是重建加 force push。
 - 同步只影响之后新建的仓库；已经在用的项目按「在已有项目里补文档」取用。
 - 脚本会先比较内容：`templates/` 没有实际变化时直接退出，不会产生多余的 force push。
 - 撤销一次模板改动：在 `dev` 上 revert 对应提交，再同步一次，不在 `main` 上回滚。
-- skills 与插件属于主机环境，记录在 TOOLS.md，不随项目模板走；要随新项目分发的文件放到 `templates/` 顶层。脚本目前只收录顶层文件，目录（如 `.claude/`、`docs/`）不会递归带过去。
+- 要随新项目分发的文件放到 `templates/` 顶层。脚本目前只收录顶层文件，目录（如 `.claude/`、`docs/`）不会递归带过去。
 
 ## 默认项目模板
 
@@ -127,6 +123,6 @@ docs 是扩展文档目录，并不等于 ADR。无需在项目启动时建立�
 
 ## 从旧结构取用时
 
-旧版根目录的占位模板已移入 templates，SKILLS.md 扩展为 TOOLS.md，CONTEXT.md 改为可选的 GLOSSARY.md。已有项目可按需合并这些变化，不需要整体迁移。
+旧版根目录的占位模板已移入 templates，TOOLS.md（原 SKILLS.md）已删除、工具安装统一见 Tommy-skills，CONTEXT.md 改为可选的 GLOSSARY.md。已有项目可按需合并这些变化，不需要整体迁移。
 
 本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。旧版 plan-flow skill 已删除，需要时从 Git 历史找回；原 robot-il 分支已归档为 `archive/robot-il` 标签，不再维护。

@@ -12,9 +12,9 @@
 ## 维护边界
 
 - 项目背景、目标、计划的实质信息由用户提供和决定。AI 可以整理和补漏，不凭空填写虚拟环境、硬件参数、设备可用性或安装来源。
-- 默认模板只有 README、AGENTS、PLAN、CODEBASE_MAP；CODEBASE_MAP 随脚手架提供占位，纯文档项目可删；PLAN 不进脚手架，按任务创建；TODO、术语表、docs 和 ADR 按需采用，不把可选文档重新变成前置条件。
+- 默认模板只有 README、AGENTS、CLAUDE、CODEBASE_MAP；CODEBASE_MAP 随脚手架提供占位，纯文档项目可删；PLAN、TODO、术语表、docs 和 ADR 放在 `templates/optional/`，按需采用，不把可选文档重新变成前置条件。
 - 模板中的占位符是填写提示，不代表当前项目的实际情况。不要把本仓库的维护记录写入模板。
-- `main` 是 GitHub 模板用的脚手架快照，收录 `templates/` 顶层除 `PLAN.md` 外的文件，单个 commit，由 `scripts/sync-template-branch.sh` 从 `dev` 重建并 force-push；不手改 `main`，也不给它加分支保护，日常改动都提交到 `dev`。新增模板文件后重跑脚本即可同步。
+- `main` 是 GitHub 模板用的脚手架快照，收录 `templates/` 里直接放着的文件（不含 `optional/` 等子目录），单个 commit，由 `scripts/sync-template-branch.sh` 从 `dev` 重建并 force-push；不手改 `main`，也不给它加分支保护，日常改动都提交到 `dev`。增删默认模板只在 `templates/` 里增删文件，再重跑脚本。
 - 仓库已设为 Template repository，默认分支为 `main`；新建项目走网页的 Use this template 或 `gh repo create --template`，不再从模板分支克隆。
 - 只改根目录手册或 `templates/optional/` 不影响脚手架，不需要同步；`main` 与 `dev` 历史无关，不要尝试 merge，撤销模板改动就在 `dev` 上 revert 后再同步。
 - 改动文件职责或路径时，同时更新 CODEBASE_MAP，并检查 README、AGENTS 和模板中的引用。根 CLAUDE.md 保持指向本文件。

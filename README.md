@@ -14,7 +14,7 @@
 |---|---|---|
 | 创建新项目 | 用 GitHub 的 Use this template 新建仓库，单 commit 即用 | [新建项目](#新建项目) |
 | 项目有代码结构后 | 标出主要目录与职责分组，供 review 和修改时定位 | [CODEBASE_MAP 模板](templates/CODEBASE_MAP.md) |
-| 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/PLAN.md) |
+| 开始具体任务 | 写清本次任务、步骤与验收标准，需要时使用 PLAN | [PLAN 模板](templates/optional/PLAN.md) |
 | 一个开发阶段验证通过 | 按独立改动分组；有提交授权时逐组执行 commit | [AGENTS.md](AGENTS.md#git-分组提交) |
 | 文档需求增加 | 按实际缺口增加待办、术语表或决策记录 | [可选模板](#可选模板与扩展文档) |
 
@@ -27,24 +27,25 @@ dev ──scripts/sync-template-branch.sh──▶ main
 | 分支 | 角色 | 规则 |
 |---|---|---|
 | `dev` | 唯一写入分支：手册、templates、scripts | 所有改动都在这里提交 |
-| `main` | 生成物：`templates/` 顶层除 `PLAN.md` 外的文件，单个 commit | 由脚本重建，不手改、不 merge、不加分支保护 |
+| `main` | 生成物：`templates/` 里直接放着的文件，单个 commit | 由脚本重建，不手改、不 merge、不加分支保护 |
 
 一次完整的更新：
 
 ```bash
 git checkout dev
-# 改 templates/ 顶层文件；只改手册则不涉及模板
+# 改 templates/ 里的默认模板；只改手册或 optional/ 则不涉及 main
 git add -A && git commit
 git push origin dev
 scripts/sync-template-branch.sh --push   # 只有改了模板才需要
 ```
 
+- 规则只有一条：`templates/` 里直接放着的文件就是 `main` 的全部内容，`optional/` 等子目录不进入。要给 `main` 加文件就放进 `templates/`，要去掉就删除或挪进 `templates/optional/`，然后运行脚本。
 - 只改根目录的手册或 `templates/optional/`：不进脚手架，不需要同步。
 - `dev` 里没有 `main` 的提交，两者历史无关，所以不存在「把 dev 合并进 main」这一步；同步永远是重建加 force push。
 - 同步只影响之后新建的仓库；已经在用的项目按「在已有项目里补文档」取用。
 - 脚本会先比较内容：`templates/` 没有实际变化时直接退出，不会产生多余的 force push。
 - 撤销一次模板改动：在 `dev` 上 revert 对应提交，再同步一次，不在 `main` 上回滚。
-- 要随新项目分发的文件放到 `templates/` 顶层。脚本目前只收录顶层文件，目录（如 `.claude/`、`docs/`）不会递归带过去。
+- 脚本目前不递归子目录，`templates/` 下的目录（如 `.claude/`、`docs/`）不会带进 `main`。
 
 ## 默认项目模板
 
@@ -52,23 +53,21 @@ scripts/sync-template-branch.sh --push   # 只有改了模板才需要
 |---|---|---|
 | [README.md](templates/README.md) | 项目做什么、为什么做、怎么用？ | 启动时先写目标与范围；成果和用法明确后补齐；目标变化时更新 |
 | [AGENTS.md](templates/AGENTS.md) | 智能体在什么环境下工作，需要遵守什么？ | 首次协作前填写环境、资源、协作与提交约定；实际情况变化时更新 |
-| [PLAN.md](templates/PLAN.md) | 当前这一件任务怎么完成，如何验收？ | 具体任务需要拆解或跨会话接续时创建；执行中更新步骤和验收结果 |
+| [CLAUDE.md](templates/CLAUDE.md) | Claude Code 从哪里读取约定？ | 只有一行 `@AGENTS.md`，让 Claude Code 读取同一份 AGENTS；不在其中另写内容 |
 | [CODEBASE_MAP.md](templates/CODEBASE_MAP.md) | 代码在哪、改某类功能该看哪些位置？ | 脚手架自带；有代码结构后按实际目录填写，结构变化时更新 |
 
 README 的项目目标与 AGENTS 的工作环境都反映当前有效情况。项目实际用哪个虚拟环境、在哪台机器训练、有哪些可用设备，写在 AGENTS；README 维护面向使用者的运行方法，AGENTS 引用相应章节，避免两份命令长期分叉。
-
-PLAN 只记录当前任务，不扩展成所有任务的路线图。用户确认目标、范围和验收标准后开始执行，执行中在同一文件标记进度；完成后保留结果，开始下一项任务前确认有价值的记录已提交到 Git，再更新为新任务。Git 历史只能找回已提交的内容。
 
 CODEBASE_MAP 随脚手架提供占位，有目录结构后按实际填写；纯文档项目可以删掉它。它不重复 README 的用法说明，也不替代 AGENTS 的环境事实。
 
 ## 新建项目
 
-本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：收录 `templates/` 顶层除 `PLAN.md` 外的文件，单个 commit、无父提交，不含手册历史。
+本仓库是 GitHub Template repository，默认分支 `main` 就是脚手架：收录 `templates/` 里直接放着的文件，单个 commit、无父提交，不含手册历史。
 
 1. 在 GitHub 点 **Use this template** → Create a new repository，选择模板后直接创建；不要勾 Include all branches，否则 `dev` 也会被带进新仓库。
 2. 或者命令行：`gh repo create my-project --template cucu11039004-web/ai-codingflow --private`。
 
-新仓库只有一条 Initial commit，根目录就是这几份默认模板。填掉括号里的提示、删掉不需要的段落即可开始；模板不收录 `PLAN.md`，需要拆解任务时再从 `dev` 的 `templates/` 取，避免空占位被当成真实计划。
+新仓库只有一条 Initial commit，根目录就是这几份默认模板。填掉括号里的提示、删掉不需要的段落即可开始；脚手架不收录 `PLAN.md`，需要拆解任务时再从 `templates/optional/` 取，避免空占位被当成真实计划。
 
 `main` 由 [scripts/sync-template-branch.sh](scripts/sync-template-branch.sh) 从 `dev` 重建，是生成物：不要手改，也不要加分支保护。改完 `templates/` 在 `dev` 上提交后运行：
 
@@ -76,7 +75,7 @@ CODEBASE_MAP 随脚手架提供占位，有目录结构后按实际填写；纯�
 scripts/sync-template-branch.sh --push
 ```
 
-脚本自动收录 `templates/` 顶层的文件，`exclude` 数组里的（目前只有 `PLAN.md`）不进入脚手架；以后新增模板文件，重跑脚本就会自动同步到 `main`。
+以后新增或删除默认模板，只需在 `templates/` 里增删文件，重跑脚本就会同步到 `main`。
 
 ### 在已有项目里补文档
 
@@ -84,17 +83,17 @@ scripts/sync-template-branch.sh --push
 
 ```bash
 # 本机有手册克隆时
-cp /path/to/ai-codingflow/templates/PLAN.md PLAN.md
+cp /path/to/ai-codingflow/templates/optional/PLAN.md PLAN.md
 
 # 任何机器都能取（仓库公开）
-curl -fsSL https://raw.githubusercontent.com/cucu11039004-web/ai-codingflow/dev/templates/PLAN.md -o PLAN.md
+curl -fsSL https://raw.githubusercontent.com/cucu11039004-web/ai-codingflow/dev/templates/optional/PLAN.md -o PLAN.md
 
 # 想统一走 gh（私有仓库也可）
 gh api -H "Accept: application/vnd.github.raw" \
-  "/repos/cucu11039004-web/ai-codingflow/contents/templates/PLAN.md?ref=dev" > PLAN.md
+  "/repos/cucu11039004-web/ai-codingflow/contents/templates/optional/PLAN.md?ref=dev" > PLAN.md
 ```
 
-可选模板把路径换成 `templates/optional/TODO.md`、`templates/optional/GLOSSARY.md`；取 ADR 时先 `mkdir -p docs/adr`，再取 `templates/optional/docs/adr/README.md` 和 `TEMPLATE.md`。`docs/` 本身有实际内容时再建，不提前留空目录。
+其他可选模板把路径换成 `templates/optional/TODO.md`、`templates/optional/GLOSSARY.md`；取 ADR 时先 `mkdir -p docs/adr`，再取 `templates/optional/docs/adr/README.md` 和 `TEMPLATE.md`。`docs/` 本身有实际内容时再建，不提前留空目录。
 
 PLAN 绑定当前任务，`docs/` 放独立成篇的说明，都按需添加，不用一次补齐；补完后按文件里的提示填写，删掉不适用的占位。
 
@@ -102,10 +101,13 @@ PLAN 绑定当前任务，`docs/` 放独立成篇的说明，都按需添加，�
 
 | 项目 | 什么时候需要 | 取用方式 |
 |---|---|---|
+| PLAN.md | 开始具体任务，需要拆解步骤、写验收标准或跨会话接续 | 将 [PLAN 模板](templates/optional/PLAN.md) 放到项目根目录 |
 | TODO.md | 要保存当前计划之外的待办，且没有其他任务工具承担此职责 | 将 [TODO 模板](templates/optional/TODO.md) 放到项目根目录 |
 | GLOSSARY.md | 出现需要统一含义的项目专有术语 | 将 [术语表模板](templates/optional/GLOSSARY.md) 放到项目根目录 |
 | docs/ | 设计说明、实验记录、操作指南等需要独立成篇 | 有实际内容时创建对应文档，再从 README 或 AGENTS 链接过去 |
 | docs/adr/ | 重要决策的理由、备选方案和后果值得长期保留 | 按 [ADR 使用说明](templates/optional/docs/adr/README.md) 取用 [ADR 模板](templates/optional/docs/adr/TEMPLATE.md) |
+
+PLAN 只记录当前任务，不扩展成所有任务的路线图。用户确认目标、范围和验收标准后开始执行，执行中在同一文件标记进度；完成后保留结果，开始下一项任务前确认有价值的记录已提交到 Git，再更新为新任务。Git 历史只能找回已提交的内容。
 
 没有 TODO 时，当前任务进度由 PLAN 承担；有 TODO 时，TODO 只保存任务级状态，实施步骤仍放 PLAN。术语表采用 GLOSSARY.md 命名，替代旧版的 CONTEXT.md，避免与工作环境背景混淆。
 
@@ -113,6 +115,6 @@ docs 是扩展文档目录，并不等于 ADR。无需在项目启动时建立�
 
 ## 从旧结构取用时
 
-旧版根目录的占位模板已移入 templates，TOOLS.md（原 SKILLS.md）已删除、工具安装统一见 Tommy-skills，CONTEXT.md 改为可选的 GLOSSARY.md。已有项目可按需合并这些变化，不需要整体迁移。
+旧版根目录的占位模板已移入 templates，TOOLS.md（原 SKILLS.md）已删除、工具安装统一见 Tommy-skills，CONTEXT.md 改为可选的 GLOSSARY.md，PLAN.md 移入 `templates/optional/`。已有项目可按需合并这些变化，不需要整体迁移。
 
 本版以 `dev` 上的通用模板为入口，`main` 只是由它生成的脚手架快照。旧版 plan-flow skill 已删除，需要时从 Git 历史找回；原 robot-il 分支已归档为 `archive/robot-il` 标签，不再维护。

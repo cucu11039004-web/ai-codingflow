@@ -13,9 +13,8 @@
 - [scripts/](scripts/)
   - [sync-template-branch.sh](scripts/sync-template-branch.sh)——从 `dev` 已提交的 `templates/` 重建 `main` 脚手架
 - [templates/](templates/)——给新项目用的模板；根目录的同名文件描述的是本仓库，不要混用
-  - README.md、AGENTS.md、CLAUDE.md、CODEBASE_MAP.md——默认模板，进入 `main` 脚手架
-  - PLAN.md——当前任务模板，放在顶层，但被脚本的 `exclude` 名单排除，不进 `main`
-  - [optional/](templates/optional/)——按需取用的 TODO、GLOSSARY 和 `docs/adr/` 模板，不进 `main`
+  - README.md、AGENTS.md、CLAUDE.md、CODEBASE_MAP.md——默认模板；`templates/` 里直接放着的文件就是 `main` 的全部内容
+  - [optional/](templates/optional/)——按需取用的 PLAN、TODO、GLOSSARY 和 `docs/adr/` 模板，不进 `main`
 - .gitignore——忽略本地 agent 目录与运行时产物
 
 ## 各部分职责
@@ -23,6 +22,6 @@
 | 分组 | 涉及位置 | 职责 | 改动后是否要同步 `main` |
 |---|---|---|---|
 | 手册 | README.md、AGENTS.md、CODEBASE_MAP.md | 描述本仓库的工作流、约定和布局 | 不需要 |
-| 脚手架模板 | `templates/` 顶层除 PLAN.md 外的文件 | 新建项目时得到的初始文件 | 需要：在 `dev` 提交后运行 `scripts/sync-template-branch.sh --push` |
-| 按需模板 | `templates/PLAN.md`、`templates/optional/` | 已有项目按需取用的单个文件 | 不需要 |
+| 脚手架模板 | `templates/` 里直接放着的文件 | 新建项目时得到的初始文件 | 需要：在 `dev` 提交后运行 `scripts/sync-template-branch.sh --push` |
+| 按需模板 | `templates/optional/` | 已有项目按需取用的单个文件 | 不需要 |
 | 维护脚本 | `scripts/` | 决定哪些文件进入 `main` 并重建它 | 改了收录规则后运行一次，确认 `main` 内容符合预期 |

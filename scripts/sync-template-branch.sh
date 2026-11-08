@@ -4,8 +4,7 @@
 #   scripts/sync-template-branch.sh          # 只更新本地 main
 #   scripts/sync-template-branch.sh --push   # 更新后强制推送到 origin
 #
-# templates/ 顶层的文件会自动进入脚手架；PLAN 是当前任务文档，按需创建，不放进模板。
-exclude=(PLAN.md)
+# 规则：templates/ 里直接放着的文件就是 main 的全部内容；optional/ 等子目录不进入。
 
 set -euo pipefail
 
@@ -28,9 +27,6 @@ while IFS=$'\t' read -r meta name; do
   type=${meta#* }
   type=${type%% *}
   [[ "$type" == "blob" ]] || continue
-  for skip in "${exclude[@]}"; do
-    [[ "$name" == "$skip" ]] && continue 2
-  done
   files+=("$name")
 done < <(git ls-tree "dev:templates/")
 

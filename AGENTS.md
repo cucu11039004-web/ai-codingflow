@@ -12,7 +12,7 @@
 ## 维护边界
 
 - 项目背景、目标、计划的实质信息由用户提供和决定。AI 可以整理和补漏，不凭空填写虚拟环境、硬件参数、设备可用性或安装来源。
-- 默认模板只有 README、AGENTS、CLAUDE、CODEBASE_MAP、GLOSSARY 和 docs/README；CODEBASE_MAP 随脚手架提供占位，纯文档项目可删；GLOSSARY 出现需要统一的术语时再填；PLAN、TODO 和 ADR 放在 `templates/optional/`，按需采用，不把可选文档重新变成前置条件。
+- 默认模板只有 README、AGENTS、CLAUDE、CODEBASE_MAP、GLOSSARY 和 docs/README；CODEBASE_MAP 随脚手架提供占位，有目录结构时填写；GLOSSARY 出现需要统一的术语时再填；PLAN、TODO 和 ADR 放在 `templates/optional/`，按需采用，不把可选文档重新变成前置条件。
 - 模板中的占位符是填写提示，不代表当前项目的实际情况。不要把本仓库的维护记录写入模板。
 - `main` 是 GitHub 模板用的脚手架快照，收录 `templates/` 下除 `optional/` 外的全部内容，单个 commit，由 `scripts/sync-template-branch.sh` 从 `dev` 重建并 force-push；不手改 `main`，也不给它加分支保护，日常改动都提交到 `dev`。增删默认模板只在 `templates/` 里增删文件，再重跑脚本。
 - 仓库已设为 Template repository，默认分支为 `main`；新建项目走网页的 Use this template 或 `gh repo create --template`，不再从模板分支克隆。

@@ -13,8 +13,8 @@
 - [scripts/](scripts/)
   - [sync-template-branch.sh](scripts/sync-template-branch.sh)——从 `dev` 已提交的 `templates/` 重建 `main` 脚手架
 - [templates/](templates/)——给新项目用的模板；根目录的同名文件描述的是本仓库，不要混用
-  - README.md、AGENTS.md、CLAUDE.md、CODEBASE_MAP.md——默认模板；`templates/` 里直接放着的文件就是 `main` 的全部内容
-  - [optional/](templates/optional/)——按需取用的 PLAN、TODO、GLOSSARY 和 `docs/adr/` 模板，不进 `main`
+  - README.md、AGENTS.md、CLAUDE.md、CODEBASE_MAP.md、GLOSSARY.md——默认模板；`templates/` 里直接放着的文件就是 `main` 的全部内容
+  - [optional/](templates/optional/)——按需取用的 PLAN、TODO 和 `docs/adr/` 模板，不进 `main`
 - .gitignore——忽略本地 agent 目录与运行时产物
 
 ## 各部分职责

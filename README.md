@@ -20,7 +20,7 @@ gh repo create my-project --template cucu11039004-web/ai-codingflow --private
 
 | 模板 | 用途 |
 |---|---|
-| [README.md](templates/README.md) | 启动时先写背景与目标、如何使用，确定项目做什么、为什么做、怎么用 |
+| [README.md](templates/README.md) | 启动时先写背景与目标、本仓库现状、如何使用，确定项目做什么、为什么做、怎么用 |
 | [AGENTS.md](templates/AGENTS.md) | 智能体在什么环境下工作、要遵守什么：用哪个虚拟环境、在哪台机器训练、有哪些可用设备；协作与提交约定。实际情况变化时更新 |
 | [CLAUDE.md](templates/CLAUDE.md) | 只有一行 `@AGENTS.md`，让 Claude Code 读同一份约定 |
 | [CODEBASE_MAP.md](templates/CODEBASE_MAP.md) | 目录职责，改某类功能该看哪里；有目录结构时填写 |

@@ -4,7 +4,7 @@
 >
 > 背景、目标、计划由你提供和决定，AI 可以润色、追问、检查遗漏；模板帮助表达清楚，不要求每个项目填满所有文件。
 
-## main 分支：新建项目
+## 一、main 分支：新建项目
 
 > `main` 是脚手架快照，用它新建仓库。
 
@@ -32,7 +32,7 @@ gh repo create my-project --template cucu11039004-web/ai-codingflow --private
 
 可选模板不进脚手架，需要时从 `templates/optional/` 复制到项目里对应位置。
 
-## dev 分支：修改与同步
+## 二、dev 分支：修改与同步
 
 > 所有改动提交在 `dev`；改了模板就同步到 `main`。
 

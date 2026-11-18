@@ -16,3 +16,6 @@ __pycache__/
 # datasets/
 
 # 项目文档与 templates/ 都应被跟踪，不忽略 docs/。
+
+# macOS
+.DS_Store
